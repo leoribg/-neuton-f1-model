@@ -148,14 +148,17 @@ void loop(void)
       calculate_statistics(data, NUM_SAMPLES);
       // Save statistics
       save_stats();
-
       if (neuton_model_set_inputs((input_t *)&stats) == 0)
       {
         uint16_t predictedClass;
         float *probabilities;
+         unsigned long start = micros();
 
         if (neuton_model_run_inference(&predictedClass, &probabilities) == 0)
         {
+          // Calculate inference time
+          Serial.print("Inference time = ");
+          Serial.println((micros() - start));
           // code for handling prediction result
           Serial.print("Predicted CAR: ");
           switch (predictedClass)
